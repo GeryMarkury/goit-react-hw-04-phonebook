@@ -1,24 +1,17 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import css from './NameForm.module.css'
 
-export class NameForm extends Component {
+export default function NameForm ({onAddContact}) {
 
-    state = {
-        name: '',
-        number: '',
-    };
-    
-    handleChange = event => {
-        this.setState({ [event.currentTarget.name]: event.currentTarget.value })
-    };
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
 
-    handleOnClick = () => {
-        this.props.onAddContact(this.state.name, this.state.number);
-        this.setState({ name: '', number: '', });
-    };
 
-    render() {
-        const { name, number } = this.state;
+    const handleOnClick = () => {
+        onAddContact(name, number);
+        setName('');
+        setNumber('');
+    };
 
         return (
             <form className={css.form}>
@@ -26,7 +19,7 @@ export class NameForm extends Component {
                     type="text"
                     name="name"
                     value={name}
-                    onChange={this.handleChange}
+                    onChange={event => setName(event.currentTarget.value)}
                     pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
                     title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
                     required
@@ -35,13 +28,12 @@ export class NameForm extends Component {
                     type="tel"
                     name="number"
                     value={number}
-                    onChange={this.handleChange}
+                    onChange={event => setNumber(event.currentTarget.value)}
                     pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                     title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                     required
                 /></label>
-                <button type="button" onClick={this.handleOnClick} className={css.formBtn}>Add contact</button>
+                <button type="button" onClick={handleOnClick} className={css.formBtn}>Add contact</button>
                 </form>
                 )
     }
-}
